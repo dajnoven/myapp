@@ -30,3 +30,46 @@ $(function () {
         $(".forgot").toggleClass("forgot-fade");
     });
 });
+
+$(document).ready(function () {
+    // Проверка логина на некорректные символы
+    $('#register-form').submit(function (event) {
+        const username = $('#username').val();
+        const password = $('#password').val();
+        const confirmPassword = $('#confirm-password').val();
+        const usernameRegex = /^[a-zA-Z0-9_]+$/;
+
+        if (!usernameRegex.test(username)) {
+            showError('username', 'Логин может содержать только буквы, цифры и "_".');
+            event.preventDefault();
+        }
+
+        if (password !== confirmPassword) {
+            showError('confirm-password', 'Пароли не совпадают.');
+            event.preventDefault();
+        }
+    });
+
+    // Показать/скрыть пароль
+    $('.toggle-password').click(function () {
+        const input = $($(this).attr('toggle'));
+        if (input.attr('type') === 'password') {
+            input.attr('type', 'text');
+        } else {
+            input.attr('type', 'password');
+        }
+    });
+
+    // Вход без учета регистра
+    $('#login-form').submit(function () {
+        let username = $('#login-username').val();
+        $('#login-username').val(username.toLowerCase());
+    });
+
+    // Функция для показа ошибок
+    function showError(inputId, message) {
+        const inputElement = $('#' + inputId);
+        inputElement.addClass('error');
+        inputElement.after('<span class="error-message">' + message + '</span>');
+    }
+});
