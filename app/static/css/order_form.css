@@ -4,14 +4,7 @@ html, body * {
 }
 
 body {
-    background: -webkit-linear-gradient(
-            rgba(246, 247, 249, 0.8),
-            rgba(246, 247, 249, 0.8)),
-    url(app/static/images/background.jpg) no-repeat center center fixed;
-    background: linear-gradient(
-            rgba(246, 247, 249, 0.8),
-            rgba(246, 247, 249, 0.8)),
-    url(app/static/images/background.jpg) no-repeat center center fixed;
+    background: url(../images/order_form_bg.jpg) no-repeat center center fixed;
     background-size: cover;
 }
 
@@ -46,6 +39,7 @@ body {
 }
 
 .variant-selection {
+    color: white;
     margin-bottom: 20px;
     text-align: center;
 }
@@ -91,6 +85,7 @@ body {
 }
 
 .order-table-heading {
+    color: white;
     text-align: center; /* Центрируем заголовок таблицы */
 }
 
@@ -123,6 +118,81 @@ body {
 
 .confirm:hover:enabled {
     background-color: #218838; /* Darker green color for hover state */
+}
+
+.order-table-container {
+    width: 100%;
+    padding-top: 60px;
+    padding-bottom: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: rgba(35, 43, 85, 0.75);
+    border-radius: 5px;
+    box-shadow: 0px 2px 7px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+}
+
+.order-table {
+    width: 80%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+.order-table th, .order-table td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: center;
+    color: #fff;
+}
+
+.order-table th {
+    background-color:  rgb(0 41 255 / 75%);
+    color:  #ffffff;
+}
+
+.order-table-heading {
+    color: #ffffff;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.btn-order {
+    background-color: #28a745;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color .3s ease;
+}
+
+.btn-order:hover {
+    background-color: #218838;
+}
+
+@media (max-width: 768px) {
+    .order-table-container {
+        padding-top: 30px;
+        padding-bottom: 50px;
+    }
+
+    .order-table {
+        width: 100%;
+    }
+
+    .order-table th, .order-table td {
+        padding: 5px;
+    }
+}
+
+.order-table tbody tr:nth-child(odd) {
+    background-color: rgba(35, 43, 85, 0.75);
+}
+
+.order-table tbody tr:nth-child(even) {
+    background-color: rgba(35, 43, 85, 0.95);
 }
 
 /* Responsive adjustments */
