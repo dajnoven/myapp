@@ -51,7 +51,7 @@ def order_form():
         return redirect(url_for('index'))
     variant1_data = read_excel("Вариант1")
     variant2_data = read_excel("Вариант2")
-    return render_template("form.html", variant1_data=variant1_data, variant2_data=variant2_data)
+    return render_template("order_form.html", variant1_data=variant1_data, variant2_data=variant2_data)
 
 @app.route('/load_products', methods=['POST'])
 def load_products():
