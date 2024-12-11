@@ -21,7 +21,7 @@ def save_user_to_excel(username, email, password):
     if file_exists:
         existing_df = pd.read_excel('app/data/users.xlsx', engine='openpyxl')
         df = pd.concat([existing_df, df], ignore_index=True)
-    with pd.ExcelWriter('data/users.xlsx', engine='openpyxl', mode='w') as writer:
+    with pd.ExcelWriter('app/data/users.xlsx', engine='openpyxl', mode='w') as writer:
         df.to_excel(writer, index=False, header=True)
 
 

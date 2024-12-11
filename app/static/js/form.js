@@ -22,7 +22,7 @@ $(document).ready(function () {
     }
 
     function displayProducts(products) {
-        let tableBody = $("#products-table tbody");
+        let tableBody = $("#products-table-body");
         tableBody.empty();
         products.forEach(function (product) {
             let row = `<tr>
