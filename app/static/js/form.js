@@ -110,8 +110,8 @@ $(document).ready(function () {
         loadProducts(selectedVariant);
     });
 
-    // Активируем кнопку для предзагруженного варианта
-    $("#variant1").addClass("active");
+// Активируем кнопку для предзагруженного варианта
+    $('.variant-button[data-variant="variant1"]').addClass('active');
 
     // Проверка на ввод в поля
     $('#order-form').on("input change", validateForm);
