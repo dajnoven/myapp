@@ -30,7 +30,7 @@ def login():
         username = request.form['username']
         password = request.form['password']
         try:
-            users = pd.read_excel('data/users.xlsx', engine='openpyxl').to_dict(orient='records')
+            users = pd.read_excel('app/data/users.xlsx', engine='openpyxl').to_dict(orient='records')
             user = next((user for user in users if user['username'] == username), None)
             if user and check_password_hash(user['password'], password):
                 session['username'] = user['username']
