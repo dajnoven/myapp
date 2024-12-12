@@ -183,13 +183,15 @@ li {
 }
 
 .error {
-    border-color: red;
+    border: 2px solid red;
 }
 
 .error-message {
     color: red;
     font-size: 12px;
+    margin-top: 5px;
 }
+
 
 #check path {
     stroke: #ffffff;

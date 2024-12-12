@@ -12,7 +12,7 @@ def index():
         return redirect(url_for('order_form'))
     return render_template('index.html')
 
-@app.route('/register', methods=['GET', 'POST'])
+@app.route('/register', methods=['POST'])
 def register():
     if request.method == 'POST':
         firstname = request.form['firstname']
@@ -24,7 +24,7 @@ def register():
         confirm_password = request.form['confirmpassword']
 
         # Validate inputs
-        if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
+        if not re.match(r"[^@]+@[^@]+\\.[^@]+", email):
             return jsonify({"error": "Невірний формат електронної пошти."}), 400
         if password != confirm_password:
             return jsonify({"error": "Паролі не співпадають."}), 400
@@ -36,8 +36,6 @@ def register():
         save_user_to_excel(firstname, lastname, middlename, phone, email, hashed_password)
         return jsonify({"success": "Реєстрація пройшла успішно."}), 200
 
-    return redirect(url_for('index'))
-
 @app.route('/check_email', methods=['POST'])
 def check_email():
     email = request.form['email']
@@ -45,7 +43,7 @@ def check_email():
         return jsonify({"exists": True})
     return jsonify({"exists": False})
 
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/login', methods=['POST'])
 def login():
     if request.method == 'POST':
         username = request.form['username'].lower()
@@ -55,13 +53,13 @@ def login():
             user = next((user for user in users if user['username'].lower() == username), None)
             if user and check_password_hash(user['password'], password):
                 session['username'] = user['username']
-                return redirect(url_for('order_form'))
+                return jsonify({"success": "Вхід виконано успішно."}), 200
             else:
-                return jsonify({"error": "Неправильне ім'я користувача або пароль."})
+                return jsonify({"error": "Неправильне ім'я користувача або пароль."}), 400
         except Exception as e:
             print(f"Ошибка при чтении файла Excel: {e}")
-            return jsonify({"error": "Виникла помилка при вході. Спробуйте ще раз пізніше."})
-    return redirect(url_for('index'))
+            return jsonify({"error": "Виникла помилка при вході. Спробуйте ще раз пізніше."}), 500
+
 
 @app.route('/logout')
 def logout():
