@@ -34,23 +34,30 @@
             </form>
 
             <form id="register-form" class="form-signup" action="{{ url_for('register') }}" method="post" name="form">
-                <label for="fullname">Повне ім'я</label>
-                <input class="form-styling" type="text" id="fullname" name="fullname" placeholder="" required/>
+
+                <label for="firstname">Ім'я</label>
+                <input class="form-styling" type="text" name="firstname" placeholder="" required/>
+
+                <label for="lastname">Прізвище</label>
+                <input class="form-styling" type="text" name="lastname" placeholder="" required/>
+
+                <label for="middlename">По-батькові</label>
+                <input class="form-styling" type="text" name="middlename" placeholder=""/>
+
+                <label for="phone">Телефон</label>
+                <input class="form-styling" type="text" name="phone" placeholder="" required/>
 
                 <label for="email">Електронна пошта</label>
-                <input class="form-styling" type="email" id="email" name="email" placeholder="" required/>
-
-                <label for="username">Логін</label>
-                <input class="form-styling" type="text" id="username" name="username" placeholder="" required/>
+                <input class="form-styling" type="email" name="email" placeholder="" required/>
 
                 <label for="password">Пароль</label>
-                <input class="form-styling" type="password" id="password" name="password" placeholder="" required/>
+                <input class="form-styling" type="password" name="password" placeholder="" required/>
 
-                <label for="confirmpassword">Підтвердження паролю</label>
-                <input class="form-styling" type="password" id="confirmpassword" name="confirmpassword" placeholder=""
-                       required/>
+                <label for="confirmpassword">Підтвердження пароля</label>
+                <input class="form-styling" type="password" name="confirmpassword" placeholder="" required/>
 
                 <button type="submit" class="btn-signup">Зареєструватися</button>
+
                 <div class="error-message"></div>
             </form>
 
