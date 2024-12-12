@@ -6,35 +6,43 @@ import pandas as pd
 import os
 import re
 
-
 @app.route('/')
 def index():
     if 'username' in session:
         return redirect(url_for('order_form'))
     return render_template('index.html')
 
-
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
-        fullname = request.form['fullname']
+        firstname = request.form['firstname']
+        lastname = request.form['lastname']
+        middlename = request.form['middlename']
+        phone = request.form['phone']
         email = request.form['email']
-        username = request.form['username']
         password = request.form['password']
         confirm_password = request.form['confirmpassword']
 
-        if not re.match(r"^[a-zA-Z0-9_]+$", username):
-            return jsonify({"error": "Логин может содержать только буквы, цифры и '_'."})
+        # Validate inputs
+        if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
+            return jsonify({"error": "Невірний формат електронної пошти."})
         if password != confirm_password:
-            return jsonify({"error": "Пароли не совпадают."})
-        if user_exists(fullname):
-            return jsonify({"error": "Пользователь уже существует. Попробуйте другое имя."})
+            return jsonify({"error": "Паролі не співпадають."})
+        if user_exists(email):
+            return jsonify({"error": "Ця електронна адреса вже зареєстрована."})
 
+        # Hash the password
         hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
-        save_user_to_excel(fullname, email, hashed_password)
+        save_user_to_excel(firstname, lastname, middlename, phone, email, hashed_password)
         return redirect(url_for('login'))
     return redirect(url_for('index'))
 
+@app.route('/check_email', methods=['POST'])
+def check_email():
+    email = request.form['email']
+    if user_exists(email):
+        return jsonify({"exists": True})
+    return jsonify({"exists": False})
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -47,17 +55,17 @@ def login():
             if user and check_password_hash(user['password'], password):
                 session['username'] = user['username']
                 return redirect(url_for('order_form'))
+            else:
+                return jsonify({"error": "Неправильне ім'я користувача або пароль."})
         except Exception as e:
             print(f"Ошибка при чтении файла Excel: {e}")
-        return jsonify({"error": "Неправильное имя пользователя или пароль."})
+            return jsonify({"error": "Виникла помилка при вході. Спробуйте ще раз пізніше."})
     return redirect(url_for('index'))
-
 
 @app.route('/logout')
 def logout():
     session.pop('username', None)
     return redirect(url_for('index'))
-
 
 @app.route('/order_form', methods=['GET', 'POST'])
 def order_form():
@@ -66,7 +74,6 @@ def order_form():
     variant1_data = read_excel("Вариант1")
     variant2_data = read_excel("Вариант2")
     return render_template("order_form.html", variant1_data=variant1_data, variant2_data=variant2_data)
-
 
 @app.route('/load_products', methods=['POST'])
 def load_products():
@@ -78,7 +85,6 @@ def load_products():
     else:
         products = []
     return jsonify({'products': products})
-
 
 @app.route('/save_user_data', methods=['POST'])
 def save_user_data():

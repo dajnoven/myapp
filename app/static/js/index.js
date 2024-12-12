@@ -32,11 +32,11 @@ $(function () {
 });
 
 $(document).ready(function () {
-    // Проверка логина на некорректные символы
+    // Проверка регистрации
     $('#register-form').submit(function (event) {
-        const username = $('#username').val();
+        const email = $('#email').val();
         const password = $('#password').val();
-        const confirmPassword = $('#confirm-password').val();
+        const confirmPassword = $('#confirmpassword').val();
         const usernameRegex = /^[a-zA-Z0-9_]+$/;
 
         if (!usernameRegex.test(username)) {
@@ -45,9 +45,22 @@ $(document).ready(function () {
         }
 
         if (password !== confirmPassword) {
-            showError('confirm-password', 'Пароли не совпадают.');
+            showError('confirmpassword', 'Пароли не совпадают.');
             event.preventDefault();
         }
+
+        // Проверка на существующий e-mail
+        $.ajax({
+            url: '/check_email',
+            type: 'POST',
+            data: { email: email },
+            success: function(response) {
+                if (response.exists) {
+                    showError('email', 'Ця електронна адреса вже зареєстрована.');
+                    event.preventDefault();
+                }
+            }
+        });
     });
 
     // Показать/скрыть пароль
