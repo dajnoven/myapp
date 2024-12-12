@@ -15,27 +15,38 @@ def index():
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
-        fullname = request.form['fullname']
+        firstname = request.form['firstname']
+        lastname = request.form['lastname']
+        middlename = request.form.get('middlename', '')
+        phone = request.form['phone']
         email = request.form['email']
-        username = request.form['username']
         password = request.form['password']
         confirm_password = request.form['confirmpassword']
 
-        # Валідація логіну
-        if not re.match(r"^[a-zA-Z0-9_]+$", username):
-            return jsonify({"error": "Логін може містити тільки літери, цифри та '_'."}), 400
+        # Формирование полного имени
+        fullname = f"{firstname} {middlename} {lastname}".strip()
 
-        # Перевірка паролів
+        # Валидация email
+        if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
+            return jsonify({"error": "Некоректний формат електронної пошти."}), 400
+
+        # Проверка паролей
         if password != confirm_password:
             return jsonify({"error": "Паролі не співпадають."}), 400
 
-        # Перевірка існування користувача
-        if user_exists(username):
-            return jsonify({"error": "Користувач вже існує. Спробуйте інше ім'я."}), 400
+        # Проверка существования пользователя по email
+        if user_exists(email):
+            return jsonify({"error": "Користувач з такою електронною поштою вже існує."}), 400
 
-        # Хешування пароля
-        hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
-        save_user_to_excel(fullname, email, username, hashed_password)
+        # Хеширование пароля
+        hashed_password = generate_password_hash(password)
+
+        # Сохранение пользователя
+        save_user_to_excel(fullname, email, phone, hashed_password)
+
+        # Авторизация пользователя
+        session['username'] = email
+
         return jsonify({"success": "Реєстрація пройшла успішно."}), 200
 
     return jsonify({"error": "Некоректний запит."}), 400

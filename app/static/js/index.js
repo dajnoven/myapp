@@ -93,18 +93,28 @@ $(document).ready(function () {
                 body: formData
             });
 
-            const data = await response.json();
+            const contentType = response.headers.get('content-type');
 
-            if (response.ok) {
-                showNotification('success', data.success);
-                setTimeout(() => {
-                    window.location.href = '/order_form';
-                }, 2000);
+            if (contentType && contentType.includes('application/json')) {
+                const data = await response.json();
+
+                if (response.ok) {
+                    showNotification('success', data.success);
+                    setTimeout(() => {
+                        window.location.href = '/order_form';
+                    }, 2000);
+                } else {
+                    showNotification('error', data.error);
+                }
             } else {
-                showNotification('error', data.error);
+                const errorText = await response.text();
+                showNotification('error', 'Сталася помилка серверу. Спробуйте пізніше.');
+                console.error('Помилка сервера:', errorText);
             }
+
         } catch (error) {
             showNotification('error', 'Щось пішло не так. Спробуйте ще раз.');
+            console.error('Помилка:', error);
         }
     });
 });

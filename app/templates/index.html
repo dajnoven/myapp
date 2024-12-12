@@ -21,9 +21,9 @@
         <div ng-app ng-init="checked = false">
             <form id="login-form" class="form-signin" action="{{ url_for('login') }}" method="post" name="form">
                 <label for="username">Ім'я користувача</label>
-                <input class="form-styling" type="text" id="login-username" name="username" placeholder="" required/>
+                <input class="form-styling" type="text" id="username" name="username" placeholder="" required/>
                 <label for="password">Пароль</label>
-                <input class="form-styling" type="password" id="login-password" name="password" placeholder=""
+                <input class="form-styling" type="password" id="password" name="password" placeholder=""
                        required/>
                 <input type="checkbox" id="checkbox"/>
                 <label for="checkbox"><span class="ui"></span>Залишатися у системі</label>
@@ -36,25 +36,25 @@
             <form id="register-form" class="form-signup" action="{{ url_for('register') }}" method="post" name="form">
 
                 <label for="firstname">Ім'я</label>
-                <input class="form-styling" type="text" name="firstname" placeholder="" required/>
+                <input class="form-styling" type="text" id="firstname" name="firstname" required/>
 
                 <label for="lastname">Прізвище</label>
-                <input class="form-styling" type="text" name="lastname" placeholder="" required/>
+                <input class="form-styling" type="text" id="lastname" name="lastname" required/>
 
                 <label for="middlename">По-батькові</label>
-                <input class="form-styling" type="text" name="middlename" placeholder=""/>
+                <input class="form-styling" type="text" id="middlename" name="middlename"/>
 
                 <label for="phone">Телефон</label>
-                <input class="form-styling" type="text" name="phone" placeholder="" required/>
+                <input class="form-styling" type="text" id="phone" name="phone" required/>
 
                 <label for="email">Електронна пошта</label>
-                <input class="form-styling" type="email" name="email" placeholder="" required/>
+                <input class="form-styling" type="email" id="email" name="email" required autocomplete="@gmail.com"/>
 
                 <label for="password">Пароль</label>
-                <input class="form-styling" type="password" name="password" placeholder="" required/>
+                <input class="form-styling" type="password" id="password" name="password" required/>
 
                 <label for="confirmpassword">Підтвердження пароля</label>
-                <input class="form-styling" type="password" name="confirmpassword" placeholder="" required/>
+                <input class="form-styling" type="password" id="confirmpassword" name="confirmpassword" required/>
 
                 <button type="submit" class="btn-signup">Зареєструватися</button>
 
