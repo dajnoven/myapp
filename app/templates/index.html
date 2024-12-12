@@ -20,7 +20,7 @@
             </ul>
         </div>
         <div ng-app ng-init="checked = false">
-            <form class="form-signin" action="{{ url_for('login') }}" method="post" name="form">
+            <form id="login-form" class="form-signin" action="{{ url_for('login') }}" method="post" name="form">
                 <label for="username">Ім'я користувача</label>
                 <input class="form-styling" type="text" name="username" placeholder=""/>
                 <label for="password">Пароль</label>
