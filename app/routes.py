@@ -25,16 +25,17 @@ def register():
 
         # Validate inputs
         if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
-            return jsonify({"error": "Невірний формат електронної пошти."})
+            return jsonify({"error": "Невірний формат електронної пошти."}), 400
         if password != confirm_password:
-            return jsonify({"error": "Паролі не співпадають."})
+            return jsonify({"error": "Паролі не співпадають."}), 400
         if user_exists(email):
-            return jsonify({"error": "Ця електронна адреса вже зареєстрована."})
+            return jsonify({"error": "Ця електронна адреса вже зареєстрована."}), 400
 
         # Hash the password
         hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
         save_user_to_excel(firstname, lastname, middlename, phone, email, hashed_password)
-        return redirect(url_for('login'))
+        return jsonify({"success": "Реєстрація пройшла успішно."}), 200
+
     return redirect(url_for('index'))
 
 @app.route('/check_email', methods=['POST'])

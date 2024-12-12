@@ -34,6 +34,7 @@ $(function () {
 $(document).ready(function () {
     // Проверка регистрации
     $('#register-form').submit(function (event) {
+        const username = $('#username').val(); // Убедитесь, что поле username существует
         const email = $('#email').val();
         const password = $('#password').val();
         const confirmPassword = $('#confirmpassword').val();
@@ -58,6 +59,8 @@ $(document).ready(function () {
                 if (response.exists) {
                     showError('email', 'Ця електронна адреса вже зареєстрована.');
                     event.preventDefault();
+                } else {
+                    $('#register-form').off('submit').submit(); // Отправить форму, если email корректный
                 }
             }
         });
