@@ -12,38 +12,35 @@ def index():
         return redirect(url_for('order_form'))
     return render_template('index.html')
 
-@app.route('/register', methods=['POST'])
+@app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
-        firstname = request.form['firstname']
-        lastname = request.form['lastname']
-        middlename = request.form['middlename']
-        phone = request.form['phone']
+        fullname = request.form['fullname']
         email = request.form['email']
+        username = request.form['username']
         password = request.form['password']
         confirm_password = request.form['confirmpassword']
 
-        # Validate inputs
-        if not re.match(r"[^@]+@[^@]+\\.[^@]+", email):
-            return jsonify({"error": "Невірний формат електронної пошти."}), 400
+        # Валідація логіну
+        if not re.match(r"^[a-zA-Z0-9_]+$", username):
+            return jsonify({"error": "Логін може містити тільки літери, цифри та '_'."}), 400
+
+        # Перевірка паролів
         if password != confirm_password:
             return jsonify({"error": "Паролі не співпадають."}), 400
-        if user_exists(email):
-            return jsonify({"error": "Ця електронна адреса вже зареєстрована."}), 400
 
-        # Hash the password
+        # Перевірка існування користувача
+        if user_exists(username):
+            return jsonify({"error": "Користувач вже існує. Спробуйте інше ім'я."}), 400
+
+        # Хешування пароля
         hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
-        save_user_to_excel(firstname, lastname, middlename, phone, email, hashed_password)
+        save_user_to_excel(fullname, email, username, hashed_password)
         return jsonify({"success": "Реєстрація пройшла успішно."}), 200
 
-@app.route('/check_email', methods=['POST'])
-def check_email():
-    email = request.form['email']
-    if user_exists(email):
-        return jsonify({"exists": True})
-    return jsonify({"exists": False})
+    return jsonify({"error": "Некоректний запит."}), 400
 
-@app.route('/login', methods=['POST'])
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         username = request.form['username'].lower()
@@ -54,12 +51,10 @@ def login():
             if user and check_password_hash(user['password'], password):
                 session['username'] = user['username']
                 return jsonify({"success": "Вхід виконано успішно."}), 200
-            else:
-                return jsonify({"error": "Неправильне ім'я користувача або пароль."}), 400
         except Exception as e:
-            print(f"Ошибка при чтении файла Excel: {e}")
-            return jsonify({"error": "Виникла помилка при вході. Спробуйте ще раз пізніше."}), 500
-
+            print(f"Помилка при читанні файлу Excel: {e}")
+        return jsonify({"error": "Неправильне ім'я користувача або пароль."}), 400
+    return jsonify({"error": "Некоректний запит."}), 400
 
 @app.route('/logout')
 def logout():
@@ -93,6 +88,6 @@ def save_user_data():
     if file_exists:
         existing_df = pd.read_excel('user_data.xlsx', engine='openpyxl')
         df = pd.concat([existing_df, df], ignore_index=True)
-    with pd.ExcelWriter('user_data.xlsx', engine='openpyxl', mode='w') as writer:
-        df.to_excel(writer, index=False, header=True)
+    with pd.ExcelWriter('user_data.xlsx', engine='openpyxl', mode='a' if file_exists else 'w') as writer:
+        df.to_excel(writer, index=False, header=not file_exists)
     return jsonify({'message': 'Дані збережено!'})

@@ -14,24 +14,24 @@ def read_excel(sheet_name):
         return []
 
 
-def save_user_to_excel(username, email, password):
-    user_data = {'username': username, 'email': email, 'password': password}
+def user_exists(username):
+    if not os.path.exists('app/data/users.xlsx'):
+        return False
+    users = pd.read_excel('app/data/users.xlsx', engine='openpyxl').to_dict(orient='records')
+    return any(user['username'].lower() == username.lower() for user in users)
+
+
+def save_user_to_excel(fullname, email, username, hashed_password):
+    user_data = {
+        'fullname': fullname,
+        'email': email,
+        'username': username,
+        'password': hashed_password
+    }
     df = pd.DataFrame([user_data])
     file_exists = os.path.isfile('app/data/users.xlsx')
     if file_exists:
         existing_df = pd.read_excel('app/data/users.xlsx', engine='openpyxl')
         df = pd.concat([existing_df, df], ignore_index=True)
-    with pd.ExcelWriter('app/data/users.xlsx', engine='openpyxl', mode='w') as writer:
-        df.to_excel(writer, index=False, header=True)
-
-
-def user_exists(username):
-    try:
-        users = pd.read_excel('app/data/users.xlsx', engine='openpyxl').to_dict(orient='records')
-        return any(user['username'] == username for user in users)
-    except Exception as e:
-        print(f"Ошибка при чтении файла Excel: {e}")
-        return False
-
-
-
+    with pd.ExcelWriter('app/data/users.xlsx', engine='openpyxl', mode='a' if file_exists else 'w') as writer:
+        df.to_excel(writer, index=False, header=not file_exists)
