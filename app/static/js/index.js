@@ -1,4 +1,3 @@
-
 $(document).ready(function () {
     // Обробка кліків по кнопкам "Увійти" та "Зареєструватися"
     $(".btn").click(function () {
@@ -11,24 +10,24 @@ $(document).ready(function () {
         $(this).removeClass("idle").addClass("active");
     });
 
-    // Анімація кнопки реєстрації
-    $(".btn-signup").click(function () {
-        $(".nav").toggleClass("nav-up");
-        $(".form-signup-left").toggleClass("form-signup-down");
-        $(".success").toggleClass("success-left");
-        $(".frame").toggleClass("frame-short");
-    });
+    // **Удаляем анимации из обработчика клика по кнопке регистрации**
+    // $(".btn-signup").click(function () {
+    //     $(".nav").toggleClass("nav-up");
+    //     $(".form-signup-left").toggleClass("form-signup-down");
+    //     $(".success").toggleClass("success-left");
+    //     $(".frame").toggleClass("frame-short");
+    // });
 
-    // Анімація кнопки входу
-    $(".btn-signin").click(function () {
-        $(".btn-animate").toggleClass("btn-animate-grow");
-        $(".welcome").toggleClass("welcome-left");
-        $(".cover-photo").toggleClass("cover-photo-down");
-        $(".frame").toggleClass("frame-short");
-        $(".profile-photo").toggleClass("profile-photo-down");
-        $(".btn-goback").toggleClass("btn-goback-up");
-        $(".forgot").toggleClass("forgot-fade");
-    });
+    // **Удаляем анимации из обработчика клика по кнопке входа**
+    // $(".btn-signin").click(function () {
+    //     $(".btn-animate").toggleClass("btn-animate-grow");
+    //     $(".welcome").toggleClass("welcome-left");
+    //     $(".cover-photo").toggleClass("cover-photo-down");
+    //     $(".frame").toggleClass("frame-short");
+    //     $(".profile-photo").toggleClass("profile-photo-down");
+    //     $(".btn-goback").toggleClass("btn-goback-up");
+    //     $(".forgot").toggleClass("forgot-fade");
+    // });
 
     // Показати/сховати пароль
     $('.toggle-password').click(function () {
@@ -50,7 +49,8 @@ $(document).ready(function () {
         });
     }
 
-    // Обробка відправки форми входу
+
+    // **Обробка відправки форми входу**
     $('#login-form').on('submit', async function (e) {
         e.preventDefault();
 
@@ -62,27 +62,36 @@ $(document).ready(function () {
                 body: formData
             });
 
-            if (response.redirected) {
-                window.location.href = response.url;
-                return;
-            }
-
             const data = await response.json();
 
             if (response.ok) {
+                // Успешный вход
                 showNotification('success', data.success);
+
+                // **Запускаем анимации после успешного входа**
+                $(".btn-animate").addClass("btn-animate-grow");
+                $(".welcome").addClass("welcome-left");
+                $(".cover-photo").addClass("cover-photo-down");
+                $(".frame").addClass("frame-short");
+                $(".profile-photo").addClass("profile-photo-down");
+                $(".btn-goback").addClass("btn-goback-up");
+                $(".forgot").addClass("forgot-fade");
+
+                // Перенаправление или другие действия
                 setTimeout(() => {
                     window.location.href = '/order_form';
-                }, 2000);
+                }, 5000);
             } else {
+                // Ошибка входа
                 showNotification('error', data.error);
             }
         } catch (error) {
+            // Сетевая или серверная ошибка
             showNotification('error', 'Щось пішло не так. Спробуйте ще раз.');
         }
     });
 
-    // Обробка відправки форми реєстрації
+    // **Обробка відправки форми реєстрації**
     $('#register-form').on('submit', async function (e) {
         e.preventDefault();
 
@@ -94,28 +103,29 @@ $(document).ready(function () {
                 body: formData
             });
 
-            const contentType = response.headers.get('content-type');
+            const data = await response.json();
 
-            if (contentType && contentType.includes('application/json')) {
-                const data = await response.json();
+            if (response.ok) {
+                // Успешная регистрация
+                showNotification('success', data.success);
 
-                if (response.ok) {
-                    showNotification('success', data.success);
-                    setTimeout(() => {
-                        window.location.href = '/order_form';
-                    }, 2000);
-                } else {
-                    showNotification('error', data.error);
-                }
+                // **Запускаем анимации после успешной регистрации**
+                $(".nav").addClass("nav-up");
+                $(".form-signup").addClass("form-signup-down");
+                $(".success").removeClass("hidden").addClass("success-left");
+                $(".frame").addClass("frame-short");
+
+                // Перенаправление или другие действия
+                setTimeout(() => {
+                    window.location.href = '/order_form';
+                }, 5000);
             } else {
-                const errorText = await response.text();
-                showNotification('error', 'Сталася помилка серверу. Спробуйте пізніше.');
-                console.error('Помилка сервера:', errorText);
+                // Ошибка регистрации
+                showNotification('error', data.error);
             }
-
         } catch (error) {
+            // Сетевая или серверная ошибка
             showNotification('error', 'Щось пішло не так. Спробуйте ще раз.');
-            console.error('Помилка:', error);
         }
     });
 });

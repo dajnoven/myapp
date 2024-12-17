@@ -663,6 +663,7 @@ a.btn-goback:hover {
         height: 40px;
     }
 }
+
 @media (max-width: 480px) {
     .btn-proces, .btn-signin {
         font-size: 12px;
