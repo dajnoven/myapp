@@ -351,6 +351,22 @@ label {
     background-color: #1059FF;
 }
 
+.btn-proces {
+    float: left;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 13px;
+    text-align: center;
+    color: #ffffff;
+    padding-top: 8px;
+    width: 100%;
+    height: 35px;
+    border: none;
+    border-radius: 20px;
+    margin-top: 23px;
+    background-color: #1059FF;
+}
+
 .btn-signin {
     float: left;
     padding-top: 8px;
@@ -391,7 +407,7 @@ label {
     background-color: rgba(255, 255, 255, 1);
 }
 
-a.btn-signup:hover, a.btn-signin:hover {
+a.btn-signup:hover, a.btn-signin:hover, a.btn-proces:hover {
     cursor: pointer;
     background-color: #0F4FE6;
     -webkit-transition: background-color .5s;
@@ -453,12 +469,10 @@ a.btn-signup:hover, a.btn-signin:hover {
     top: -900px;
     background: -webkit-linear-gradient(
             rgba(35, 43, 85, 0.75),
-            rgba(35, 43, 85, 0.95)),
-    url(https://dl.dropboxusercontent.com/u/22006283/preview/codepen/landscape-nature-man-person.jpeg);
+            rgba(35, 43, 85, 0.95));
     background: linear-gradient(
             rgba(35, 43, 85, 0.75),
-            rgba(35, 43, 85, 0.95)),
-    url(https://dl.dropboxusercontent.com/u/22006283/preview/codepen/landscape-nature-man-person.jpeg);
+            rgba(35, 43, 85, 0.95));
     background-size: cover;
     opacity: 0;
     -webkit-transition: all 1.5s ease 0.55s;
@@ -477,7 +491,6 @@ a.btn-signup:hover, a.btn-signin:hover {
     border-radius: 70px;
     left: 155px;
     top: -1000px;
-    background: url(https://dl.dropboxusercontent.com/u/22006283/preview/codepen/nature-water-rocks-hiking.jpg);
     background-size: 100% 135%;
     background-position: 100% 100%;
     opacity: 0;
@@ -501,7 +514,7 @@ h1 {
 .btn-goback {
     position: relative;
     margin-right: auto;
-    top: -400px;
+    top: -500px;
     float: left;
     padding: 8px;
     width: 83%;
@@ -584,7 +597,7 @@ a.btn-goback:hover {
         padding-right: 20px;
     }
 
-    .btn-signup, .btn-signin {
+    .btn-signup, .btn-signin, .btn-proces {
         width: 90%;
         margin-left: 5%;
     }
@@ -646,6 +659,12 @@ a.btn-goback:hover {
 
 @media (max-width: 480px) {
     .btn-signup, .btn-signin {
+        font-size: 12px;
+        height: 40px;
+    }
+}
+@media (max-width: 480px) {
+    .btn-proces, .btn-signin {
         font-size: 12px;
         height: 40px;
     }

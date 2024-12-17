@@ -6,13 +6,15 @@ import pandas as pd
 import os
 import re
 
+
 @app.route('/')
 def index():
     if 'username' in session:
         return redirect(url_for('order_form'))
     return render_template('index.html')
 
-@app.route('/register', methods=['GET', 'POST'])
+
+@app.route('/register', methods=['POST'])
 def register():
     if request.method == 'POST':
         firstname = request.form['firstname']
@@ -51,6 +53,7 @@ def register():
 
     return jsonify({"error": "Некоректний запит."}), 400
 
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -67,10 +70,12 @@ def login():
         return jsonify({"error": "Неправильне ім'я користувача або пароль."}), 400
     return jsonify({"error": "Некоректний запит."}), 400
 
+
 @app.route('/logout')
 def logout():
     session.pop('username', None)
     return redirect(url_for('index'))
+
 
 @app.route('/order_form', methods=['GET', 'POST'])
 def order_form():
@@ -79,6 +84,7 @@ def order_form():
     variant1_data = read_excel("Вариант1")
     variant2_data = read_excel("Вариант2")
     return render_template("order_form.html", variant1_data=variant1_data, variant2_data=variant2_data)
+
 
 @app.route('/load_products', methods=['POST'])
 def load_products():
@@ -90,6 +96,7 @@ def load_products():
     else:
         products = []
     return jsonify({'products': products})
+
 
 @app.route('/save_user_data', methods=['POST'])
 def save_user_data():

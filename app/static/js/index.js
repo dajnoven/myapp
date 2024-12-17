@@ -1,3 +1,4 @@
+
 $(document).ready(function () {
     // Обробка кліків по кнопкам "Увійти" та "Зареєструватися"
     $(".btn").click(function () {
