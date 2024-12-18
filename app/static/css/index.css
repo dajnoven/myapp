@@ -192,6 +192,22 @@ li {
     margin-top: 5px;
 }
 
+.input-field {
+    position: relative;
+}
+
+.toggle-password {
+    position: absolute;
+    top: 55%;
+    right: 10px;
+    transform: translateY(-55%);
+    cursor: pointer;
+    color: #aaa;
+}
+
+.toggle-password:hover {
+    color: #333;
+}
 
 #check path {
     stroke: #ffffff;

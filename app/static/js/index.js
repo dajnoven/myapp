@@ -31,6 +31,7 @@ $(document).ready(function () {
 
     // Показати/сховати пароль
     $('.toggle-password').click(function () {
+        $(this).toggleClass('fa-eye fa-eye-slash');
         const input = $($(this).attr('toggle'));
         if (input.attr('type') === 'password') {
             input.attr('type', 'text');
@@ -38,6 +39,7 @@ $(document).ready(function () {
             input.attr('type', 'password');
         }
     });
+
 
     // Функція для показу повідомлень
     function showNotification(type, message) {
@@ -112,7 +114,7 @@ $(document).ready(function () {
                 // **Запускаем анимации после успешной регистрации**
                 $(".nav").addClass("nav-up");
                 $(".form-signup").addClass("form-signup-down");
-                $(".success").removeClass("hidden").addClass("success-left");
+                $(".success").addClass("success-left");
                 $(".frame").addClass("frame-short");
 
                 // Перенаправление или другие действия

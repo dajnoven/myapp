@@ -9,7 +9,7 @@ import re
 
 @app.route('/')
 def index():
-    if 'username' in session:
+    if 'fullname' in session:
         return redirect(url_for('order_form'))
     return render_template('index.html')
 
@@ -19,14 +19,14 @@ def register():
     if request.method == 'POST':
         firstname = request.form['firstname']
         lastname = request.form['lastname']
-        middlename = request.form.get('middlename', '')
+        middle_name = request.form.get('middle_name', '')
         phone = request.form['phone']
-        email = request.form['email']
-        password = request.form['password']
-        confirm_password = request.form['confirmpassword']
+        email = request.form['signup-email']
+        password = request.form['signup-password']
+        confirm_password = request.form['confirm-password']
 
         # Формирование полного имени
-        fullname = f"{firstname} {middlename} {lastname}".strip()
+        fullname = f"{firstname} {middle_name} {lastname}".strip()
 
         # Валидация email
         if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
@@ -47,7 +47,7 @@ def register():
         save_user_to_excel(fullname, email, phone, hashed_password)
 
         # Авторизация пользователя
-        session['username'] = email
+        session['username'] = fullname
 
         return jsonify({"success": "Реєстрація пройшла успішно."}), 200
 
@@ -57,13 +57,13 @@ def register():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        username = request.form['username'].lower()
-        password = request.form['password']
+        email = request.form['signin-email'].lower()
+        password = request.form['signin-password']
         try:
             users = pd.read_excel('app/data/users.xlsx', engine='openpyxl').to_dict(orient='records')
-            user = next((user for user in users if user['username'].lower() == username), None)
+            user = next((user for user in users if user['email'].lower() == email), None)
             if user and check_password_hash(user['password'], password):
-                session['username'] = user['username']
+                session['fullname'] = user['fullname']
                 return jsonify({"success": "Вхід виконано успішно."}), 200
         except Exception as e:
             print(f"Помилка при читанні файлу Excel: {e}")
@@ -73,13 +73,13 @@ def login():
 
 @app.route('/logout')
 def logout():
-    session.pop('username', None)
+    session.pop('fullname', None)
     return redirect(url_for('index'))
 
 
 @app.route('/order_form', methods=['GET', 'POST'])
 def order_form():
-    if 'username' not in session:
+    if 'fullname' not in session:
         return redirect(url_for('index'))
     variant1_data = read_excel("Вариант1")
     variant2_data = read_excel("Вариант2")

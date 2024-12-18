@@ -5,8 +5,10 @@
     <title>Анімація екрану входу/реєстрації</title>
     <link rel="stylesheet" href="../static/css/index.css">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.14/angular.min.js"></script>
 </head>
 
 <body>
@@ -20,11 +22,14 @@
         </div>
         <div ng-app ng-init="checked = false">
             <form id="login-form" class="form-signin" action="{{ url_for('login') }}" method="post" name="form">
-                <label for="username">Ім'я користувача</label>
-                <input class="form-styling" type="text" id="username" name="username" placeholder="" required/>
-                <label for="password">Пароль</label>
-                <input class="form-styling" type="password" name="password" placeholder=""
-                       required/>
+                <label for="signin-email">Електронна пошта</label>
+                <input class="form-styling" type="email" id="signin-email" name="signin-email" placeholder="" required/>
+                <div class="input-field">
+                    <label for="signin-password">Пароль</label>
+                    <input class="form-styling input" type="password" id="signin-password" name="signin-password"
+                           placeholder="" required/>
+                    <span toggle="#signin-password" class="toggle-password fa fa-eye"></span>
+                </div>
                 <input type="checkbox" id="checkbox"/>
                 <label for="checkbox"><span class="ui"></span>Залишатися у системі</label>
                 <div class="btn-animate">
@@ -41,22 +46,31 @@
                 <label for="lastname">Прізвище</label>
                 <input class="form-styling" type="text" id="lastname" name="lastname" required/>
 
-                <label for="middlename">По-батькові</label>
-                <input class="form-styling" type="text" id="middlename" name="middlename"/>
+                <label for="middle_name">По-батькові</label>
+                <input class="form-styling" type="text" id="middle_name" name="middle_name"/>
 
                 <label for="phone">Телефон</label>
                 <input class="form-styling" type="text" id="phone" name="phone" required/>
 
-                <label for="email">Електронна пошта</label>
-                <input class="form-styling" type="email" id="email" name="email" required autocomplete="@gmail.com"/>
+                <label for="signup-email">Електронна пошта</label>
+                <input class="form-styling" type="email" id="signup-email" name="signup-email" required
+                       autocomplete="@gmail.com"/>
 
-                <label for="password">Пароль</label>
-                <input class="form-styling" type="password" id="password" name="password" required/>
+                <div class="input-field">
+                    <label for="signup-password">Пароль</label>
+                    <input class="form-styling input" type="password" id="signup-password" name="signup-password"
+                           required/>
+                    <span toggle="#signup-password" class="toggle-password fa fa-eye"></span>
+                </div>
 
-                <label for="confirmpassword">Підтвердження пароля</label>
-                <input class="form-styling" type="password" id="confirmpassword" name="confirmpassword" required/>
+                <div class="input-field">
+                    <label for="confirm-password">Підтвердження пароля</label>
+                    <input class="form-styling input" type="password" id="confirm-password" name="confirm-password"
+                           required/>
+                    <span toggle="#confirm-password" class="toggle-password fa fa-eye"></span>
+                </div>
 
-                <button type="submit" class="btn-signup">Зареєструватися</button>
+                <button ng-click="checked = !checked" type="submit" class="btn-signup">Зареєструватися</button>
 
                 <div class="error-message"></div>
             </form>
@@ -81,8 +95,8 @@
         <div>
             <div class="cover-photo"></div>
             <div class="profile-photo"></div>
-            <h1 class="welcome">Вітаємо, {{ username }}</h1>
-{#            <a class="btn-goback" value="Refresh" onClick="history.go()">Повернутися назад</a>#}
+            <h1 class="welcome">Вітаємо, {{ fullname }}</h1>
+            {#            <a class="btn-goback" value="Refresh" onClick="history.go()">Повернутися назад</a>#}
         </div>
     </div>
 
