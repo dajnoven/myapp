@@ -109,7 +109,7 @@ $(document).ready(function () {
 
             if (response.ok) {
                 // Успешная регистрация
-                showNotification('success', data.success);
+                // showNotification('success', data.success);
 
                 // **Запускаем анимации после успешной регистрации**
                 $(".nav").addClass("nav-up");
@@ -120,7 +120,7 @@ $(document).ready(function () {
                 // Перенаправление или другие действия
                 setTimeout(() => {
                     window.location.href = '/order_form';
-                }, 5000);
+                }, 20000);
             } else {
                 // Ошибка регистрации
                 showNotification('error', data.error);
