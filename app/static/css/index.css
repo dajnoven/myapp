@@ -129,7 +129,8 @@ li {
 }
 
 .form-signup {
-    width: 430px;
+    width: 100%;
+    max-width: 430px;
     height: 375px;
     font-size: 16px;
     font-weight: 300;
@@ -590,7 +591,6 @@ a.btn-goback:hover {
     -webkit-transition: fill .25s ease, -webkit-transform .25s ease;
     transition: fill .25s ease, -webkit-transform .25s ease;
     transition: fill .25s ease, transform .25s ease;
-    transition: fill .25s ease, transform .25s ease, -webkit-transform .25s ease;
 }
 
 .refreshicon:hover {
@@ -600,95 +600,55 @@ a.btn-goback:hover {
     transform: rotate(180deg);
 }
 
-/* Общие настройки для маленьких экранов */
+/* Common settings for small screens */
 @media (max-width: 768px) {
-    .container {
-        padding-top: 30px;
-        padding-bottom: 50px;
-        flex-direction: column;
-    }
-
     .frame {
         width: 90%;
-        height: auto;
+        max-width: 400px;
+        height: 100vh;
+        padding: 20px;
     }
 
-    .form-signin, .form-signup {
+    .form-signin,
+    .form-signup {
         width: 100%;
-        padding-left: 20px;
-        padding-right: 20px;
+        padding: 20px;
     }
 
-    .btn-signup, .btn-signin, .btn-proces {
-        width: 90%;
-        margin-left: 5%;
-    }
-
-    h1 {
-        font-size: 28px;
-    }
-
-    .profile-photo {
-        left: 50%;
-        transform: translateX(-50%);
+    .form-signin-left, .form-signup-left {
+        transform: translateX(-100vw);
     }
 
     .cover-photo {
-        height: 100px;
-    }
-}
-
-/* Для экранов сверхмалого размера */
-@media (max-width: 480px) {
-    .form-styling {
-        height: 30px;
-        font-size: 12px;
-    }
-
-    label {
-        font-size: 11px;
-    }
-
-    h1 {
-        font-size: 24px;
+        top: -50vh;
     }
 
     .profile-photo {
-        width: 100px;
-        height: 100px;
+        top: -40vh;
+    }
+
+    .btn-signup,
+    .btn-signin {
+        width: 100%;
     }
 }
 
-@media (max-width: 768px) {
-    body {
-        font-size: 14px;
-    }
-
-    .form-signin input, .form-signup input {
-        font-size: 12px;
-    }
-}
-
-@media (max-width: 768px) {
-    body {
-        background-size: contain;
-    }
-
+@media (max-width: 480px) {
     .frame {
-        background-size: contain;
+        width: 95%;
+        max-width: 350px;
+        height: 100vh;
+        padding: 15px;
     }
-}
 
-@media (max-width: 480px) {
-    .btn-signup, .btn-signin {
-        font-size: 12px;
-        height: 40px;
+    .form-signin,
+    .form-signup {
+        padding: 15px;
     }
-}
 
-@media (max-width: 480px) {
-    .btn-proces, .btn-signin {
-        font-size: 12px;
+    .btn-signup,
+    .btn-signin {
+        font-size: 14px;
         height: 40px;
     }
 }
