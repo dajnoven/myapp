@@ -68,7 +68,7 @@ $(document).ready(function () {
 
             if (response.ok) {
                 // Успешный вход
-                showNotification('success', data.success);
+                //showNotification('success', data.success);
 
                 // **Запускаем анимации после успешного входа**
                 $(".btn-animate").addClass("btn-animate-grow");
@@ -119,7 +119,7 @@ $(document).ready(function () {
 
                 // Перенаправление или другие действия
                 setTimeout(() => {
-                    window.location.href = '/order_form';
+                    window.location.href = '/';
                 }, 20000);
             } else {
                 // Ошибка регистрации
