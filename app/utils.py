@@ -11,7 +11,7 @@ def get_db_connection():
     return conn
 
 def user_exists(email):
-    """Проверяет, существует ли пользователь с данным email."""
+
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute("SELECT 1 FROM users WHERE email = ?", (email,))
@@ -20,7 +20,7 @@ def user_exists(email):
     return user is not None
 
 def save_user_to_db(fullname, email, phone, hashed_password):
-    """Сохраняет нового пользователя в базу данных."""
+
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute(

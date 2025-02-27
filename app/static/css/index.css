@@ -650,3 +650,24 @@ a.btn-goback:hover {
         height: 40px;
     }
 }
+
+/* Additional settings for screen size 367x667 */
+/*@media (max-width: 367px) {*/
+/*    .frame {*/
+/*        width: 100%;*/
+/*        max-width: 330px;*/
+/*        height: 100vh;*/
+/*        padding: 10px;*/
+/*    }*/
+
+/*    .form-signin,*/
+/*    .form-signup {*/
+/*        padding: 10px;*/
+/*    }*/
+
+/*    .btn-signup,*/
+/*    .btn-signin {*/
+/*        font-size: 12px;*/
+/*        height: 35px;*/
+/*    }*/
+/*}*/
