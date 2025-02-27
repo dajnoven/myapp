@@ -1,17 +1,21 @@
 async function loadProducts(variant) {
     try {
-        const response = await $.ajax({
-            url: '/load_products',
-            type: 'POST',
-            data: {variant: variant}
+        const response = await fetch('/load_products', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({variant: variant})
         });
-        const products = response.products;
-        let tableContent = document.createDocumentFragment();
 
+        const data = await response.json();
+        const products = data.products;
+
+        let tableContent = document.createDocumentFragment();
         products.forEach((product, index) => {
             let tr = document.createElement('tr');
             tr.innerHTML = `
-                <td>${product['Товар']}</td>
+                <td>${product.name}</td>
                 <td>
                     <input
                         type="number"
@@ -19,19 +23,19 @@ async function loadProducts(variant) {
                         step="1"
                         value="0"
                         class="quantity"
-                        data-price="${product['Ціна']}"
+                        data-price="${product.price}"
                         data-index="${index}"
                         oninput="validatePrecision(this, 15, 3)">
                 </td>
-                <td>${product['Ціна']}</td>
+                <td>${product.price}</td>
                 <td class="sum" id="sum-${index}">0.00</td>
             `;
             tableContent.appendChild(tr);
         });
 
         const tableBody = document.getElementById('products-table-body');
-        tableBody.innerHTML = ''; // Clear existing content
-        tableBody.appendChild(tableContent); // Append new content
+        tableBody.innerHTML = '';
+        tableBody.appendChild(tableContent);
         attachQuantityListeners();
         validateForm();
     } catch (error) {

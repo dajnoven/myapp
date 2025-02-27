@@ -116,10 +116,8 @@ li {
     padding-left: 37px;
     padding-right: 37px;
     padding-top: 55px;
-    -webkit-transition: opacity .5s ease, -webkit-transform .5s ease;
-    transition: opacity .5s ease, -webkit-transform .5s ease;
+
     transition: opacity .5s ease, transform .5s ease;
-    transition: opacity .5s ease, transform .5s ease, -webkit-transform .5s ease;
 }
 
 .form-signin-left {

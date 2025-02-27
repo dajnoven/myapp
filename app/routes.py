@@ -1,111 +1,106 @@
 from flask import render_template, request, redirect, url_for, session, jsonify
 from app import app
-from app.utils import read_excel, save_user_to_excel, user_exists
+from app.utils import save_user_to_db, user_exists, get_user_by_email, get_products_by_variant
 from werkzeug.security import generate_password_hash, check_password_hash
-import pandas as pd
-import os
 import re
-
+from app.utils import send_registration_email
 
 @app.route('/')
 def index():
-    if 'fullname' in session:
+    if 'email' in session:
         return redirect(url_for('order_form'))
     return render_template('index.html')
 
-
 @app.route('/register', methods=['POST'])
 def register():
-    if request.method == 'POST':
-        firstname = request.form['firstname']
-        lastname = request.form['lastname']
-        middle_name = request.form.get('middle_name', '')
-        phone = request.form['phone']
-        email = request.form['signup-email']
-        password = request.form['signup-password']
-        confirm_password = request.form['confirm-password']
 
-        # Формирование полного имени
-        fullname = f"{firstname} {middle_name} {lastname}".strip()
+    firstname = request.form['firstname']
+    lastname = request.form['lastname']
+    middle_name = request.form.get('middle_name', '')
 
-        # Валидация email
-        if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
-            return jsonify({"error": "Некоректний формат електронної пошти."}), 400
+    email = request.form.get('signup-email', '').strip().lower()
+    phone = request.form.get('phone', '').strip()
+    password = request.form.get('signup-password', '')
+    confirm_password = request.form.get('confirm-password', '')
 
-        # Проверка паролей
-        if password != confirm_password:
-            return jsonify({"error": "Паролі не співпадають."}), 400
+    fullname = f"{firstname} {lastname} {middle_name}".strip()
+    # Проверка заполнения полей
+    if not fullname or not email or not phone or not password or not confirm_password:
+        return jsonify({"error": "Всі поля є обов'язковими для заповнення."}), 400
 
-        # Проверка существования пользователя по email
-        if user_exists(email):
-            return jsonify({"error": "Користувач з такою електронною поштою вже існує."}), 400
+    # Проверка email
+    if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
+        return jsonify({"error": "Некоректний формат електронної пошти."}), 400
 
-        # Хеширование пароля
-        hashed_password = generate_password_hash(password)
+    # Проверка существования пользователя
+    if user_exists(email):
+        return jsonify({"error": "Користувач з такою електронною поштою вже існує."}), 400
 
-        # Сохранение пользователя
-        save_user_to_excel(fullname, email, phone, hashed_password)
+    # Проверка пароля
+    if password != confirm_password:
+        return jsonify({"error": "Паролі не співпадають."}), 400
 
-        # Авторизация пользователя
-        session['username'] = fullname
+    # Хешируем пароль и сохраняем пользователя
+    hashed_password = generate_password_hash(password)
+    save_user_to_db(fullname, email, phone, hashed_password)
+    session['email'] = email
 
-        return jsonify({"success": "Реєстрація пройшла успішно."}), 200
+    try:
+        send_registration_email(email, fullname)
+    except Exception as e:
+        print(f"Ошибка отправки email: {e}")
 
-    return jsonify({"error": "Некоректний запит."}), 400
+    return jsonify({"success": "Реєстрація успішна. Перевірте свою пошту!"}), 200
 
-
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/login', methods=['POST'])
 def login():
-    if request.method == 'POST':
-        email = request.form['signin-email'].lower()
-        password = request.form['signin-password']
-        try:
-            users = pd.read_excel('app/data/users.xlsx', engine='openpyxl').to_dict(orient='records')
-            user = next((user for user in users if user['email'].lower() == email), None)
-            if user and check_password_hash(user['password'], password):
-                session['fullname'] = user['fullname']
-                return jsonify({"success": "Вхід виконано успішно."}), 200
-        except Exception as e:
-            print(f"Помилка при читанні файлу Excel: {e}")
-        return jsonify({"error": "Неправильне ім'я користувача або пароль."}), 400
-    return jsonify({"error": "Некоректний запит."}), 400
+
+    email = request.form.get('signin-email', '').strip().lower()
+    password = request.form.get('signin-password', '')
+
+    # Проверка на пустые поля
+    if not email or not password:
+        return jsonify({"error": "Будь ласка, заповніть усі поля."}), 400
+
+    user = get_user_by_email(email)
+
+    # Проверка существования пользователя
+    if not user:
+        return jsonify({"error": "Користувача з такою електронною поштою не існує."}), 400
+
+    # Проверка пароля
+    if not check_password_hash(user['password_hash'], password):
+        return jsonify({"error": "Неправильний пароль."}), 400
+
+    # Авторизация
+    session['email'] = email
+    return jsonify({"success": "Вхід виконано успішно."}), 200
 
 
 @app.route('/logout')
 def logout():
-    session.pop('fullname', None)
+    session.pop('email', None)
     return redirect(url_for('index'))
 
-
-@app.route('/order_form', methods=['GET', 'POST'])
+@app.route('/order_form', methods=['GET'])
 def order_form():
-    if 'fullname' not in session:
+    """Страница заказа с загрузкой товаров из БД"""
+    if 'email' not in session:
         return redirect(url_for('index'))
-    variant1_data = read_excel("Вариант1")
-    variant2_data = read_excel("Вариант2")
-    return render_template("order_form.html", variant1_data=variant1_data, variant2_data=variant2_data)
-
+    products = get_products_by_variant(1)
+    return render_template("order_form.html", products=products)
 
 @app.route('/load_products', methods=['POST'])
 def load_products():
-    variant = request.form.get('variant')
-    if variant == 'variant1':
-        products = read_excel("Вариант1")
-    elif variant == 'variant2':
-        products = read_excel("Вариант2")
+
+    data = request.get_json()
+    variant = data.get("variant")
+
+    if variant == "variant1":
+        products = get_products_by_variant(1)
+    elif variant == "variant2":
+        products = get_products_by_variant(2)
     else:
-        products = []
-    return jsonify({'products': products})
+        return jsonify({"error": "Невідомий варіант"}), 400
 
-
-@app.route('/save_user_data', methods=['POST'])
-def save_user_data():
-    user_data = request.form.to_dict()
-    df = pd.DataFrame([user_data])
-    file_exists = os.path.isfile('user_data.xlsx')
-    if file_exists:
-        existing_df = pd.read_excel('user_data.xlsx', engine='openpyxl')
-        df = pd.concat([existing_df, df], ignore_index=True)
-    with pd.ExcelWriter('user_data.xlsx', engine='openpyxl', mode='a' if file_exists else 'w') as writer:
-        df.to_excel(writer, index=False, header=not file_exists)
-    return jsonify({'message': 'Дані збережено!'})
+    return jsonify({"products": products})

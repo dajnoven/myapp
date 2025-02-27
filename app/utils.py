@@ -1,43 +1,71 @@
-import pandas as pd
-import os
+import sqlite3
+from flask_mail import Message
+from app import mail
 
-from app import app
+DB_PATH = "identifier.sqlite"
 
+def get_db_connection():
 
-def read_excel(sheet_name):
-    """Чтение данных из указанного листа Excel."""
-    try:
-        data = pd.read_excel(app.config['EXCEL_FILE'], sheet_name=sheet_name, engine='openpyxl')
-        return data.to_dict(orient="records")
-    except Exception as e:
-        print(f"Ошибка при чтении файла Excel: {e}")
-        return []
-
+    conn = sqlite3.connect(DB_PATH)
+    conn.row_factory = sqlite3.Row  # Позволяет обращаться к полям как к словарю
+    return conn
 
 def user_exists(email):
-    if not os.path.exists('app/data/users.xlsx'):
-        return False
-    users = pd.read_excel('app/data/users.xlsx', engine='openpyxl').to_dict(orient='records')
-    return any(user['email'].lower() == email.lower() for user in users)
+    """Проверяет, существует ли пользователь с данным email."""
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT 1 FROM users WHERE email = ?", (email,))
+    user = cursor.fetchone()
+    conn.close()
+    return user is not None
+
+def save_user_to_db(fullname, email, phone, hashed_password):
+    """Сохраняет нового пользователя в базу данных."""
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute(
+        "INSERT INTO users (fullname, email, phone, password_hash) VALUES (?, ?, ?, ?)",
+        (fullname, email, phone, hashed_password),
+    )
+    conn.commit()
+    conn.close()
+
+def get_user_by_email(email):
+    """Получает пользователя по email."""
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM users WHERE email = ?", (email,))
+    user = cursor.fetchone()
+    conn.close()
+    return user
 
 
-def save_user_to_excel(fullname, email, phone, hashed_password):
-    user_data = {
-        'fullname': fullname,
-        'email': email,
-        'phone': phone,
-        'password': hashed_password
-    }
-    df = pd.DataFrame([user_data])
-    file_path = 'app/data/users.xlsx'
-    file_exists = os.path.isfile(file_path)
+def send_registration_email(to_email, fullname):
+
+    subject = "Реєстрація успішна!"
+    body = f"Привіт, {fullname}!\n\nВи успішно зареєструвалися на сайті. Нажаль, всьо ваше бабло вже у нас^^"
+
+    msg = Message(subject, recipients=[to_email], body=body)
 
     try:
-        if file_exists:
-            existing_df = pd.read_excel(file_path, engine='openpyxl')
-            df = pd.concat([existing_df, df], ignore_index=True)
-        with pd.ExcelWriter(file_path, engine='openpyxl', mode='w') as writer:
-            df.to_excel(writer, index=False, header=True)
-        print("Данные успешно записаны в Excel.")
+        mail.send(msg)
+        print(f"📧 Письмо отправлено на {to_email}")
     except Exception as e:
-        print(f"Ошибка при записи в файл Excel: {e}")
+        print(f"❌ Ошибка при отправке email: {e}")
+
+def get_products_by_variant(variant):
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    if variant == 1:
+        cursor.execute("SELECT * FROM products WHERE id <= 7")
+    elif variant == 2:
+        cursor.execute("SELECT * FROM products WHERE id > 7")
+    else:
+        conn.close()
+        return []
+
+    products = cursor.fetchall()
+    conn.close()
+    return [{"id": row[0], "name": row[1], "price": row[2]} for row in products]
