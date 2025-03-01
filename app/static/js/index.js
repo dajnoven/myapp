@@ -62,7 +62,7 @@ $(document).ready(function () {
             } else if (data.success) {
                 showNotification('success', data.success);
 
-                document.getElementById("check").classList.add("checked");
+                document.getElementById("check").classList.add("checkmark");
 
                 triggerSuccessAnimations();
                 setTimeout(() => window.location.href = successRedirect, 4000);
