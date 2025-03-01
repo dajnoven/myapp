@@ -217,15 +217,14 @@ li {
     stroke-linejoin: round;
     stroke-width: .85px;
     stroke-dasharray: 60px 300px;
-    stroke-dashoffset: -166px;
-    fill: rgba(255, 255, 255, .0);
-    -webkit-transition: stroke-dashoffset 2s ease .5s, fill 1.5s ease 1.0s;
-    transition: stroke-dashoffset 2s ease .5s, fill 1.5s ease 1.0s;
+    stroke-dashoffset: 33px;  /* ✅ Линия сразу отображается */
+    fill: rgba(255, 255, 255, 0.03); /* ✅ Галочка сразу заполнена */
+    transition: none; /* ❌ Убираем анимацию */
 }
 
 #check.checked path {
-    stroke-dashoffset: 33px;
-    fill: rgba(255, 255, 255, .03);
+    stroke-dashoffset: 60px;
+    fill: rgba(255,255,255,.03);
 }
 
 .form-signin input, .form-signup input {

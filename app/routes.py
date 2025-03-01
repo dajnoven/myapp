@@ -84,7 +84,7 @@ def logout():
 
 @app.route('/order_form', methods=['GET'])
 def order_form():
-    """Страница заказа с загрузкой товаров из БД"""
+
     if 'email' not in session:
         return redirect(url_for('index'))
     products = get_products_by_variant(1)
