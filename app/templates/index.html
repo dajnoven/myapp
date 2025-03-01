@@ -21,7 +21,7 @@
                 <li class="signup-inactive"><a class="btn">Зареєструватися</a></li>
             </ul>
         </div>
-        <div ng-app ng-init="checked = false">
+        <div>
             <form id="login-form" class="form-signin" action="{{ url_for('login') }}" method="post" name="form">
                 <label for="signin-email">Електронна пошта</label>
                 <input class="form-styling" type="email" id="signin-email" name="signin-email" placeholder="" required/>
@@ -71,22 +71,28 @@
                     <span toggle="#confirm-password" class="toggle-password fa fa-eye"></span>
                 </div>
 
-                <button ng-click="checked = !checked" type="submit" class="btn-signup">Зареєструватися</button>
+                <button type="submit" class="btn-signup">
+                    Зареєструватися
+                </button>
 
                 <div class="error-message"></div>
             </form>
 
             <div class="success">
                 <svg width="270" height="270" xmlns="http://www.w3.org/2000/svg"
-                     xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 60 60" id="check"
-                     ng-class="checked ? 'checked' : ''">
-                    <path fill="#ffffff"
-                          d="M40.61,23.03L26.67,36.97L13.495,23.788c-1.146-1.147-1.359-2.936-0.504-4.314 c3.894-6.28,11.169-10.243,19.283-9.348c9.258,1.021,16.694,8.542,17.622,17.81c1.232,12.295-8.5,22.5-20.5,22.5 c-6.627,0-12.5-5.373-12.5-12c0-1.104-0.896-2-2-2s-2,0.896-2,2c0,8.837,7.163,16,16,16c11.046,0,20-8.954,20-20 C60,31.954,51.046,23,40.61,23.03z"/>
+                     xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                     viewBox="0 0 60 60" id="check">
+                    <path fill="#ffffff" d="M40.61,23.03L26.67,36.97L13.495,23.788c-1.146-1.147-1.359-2.936-0.504-4.314
+                  c3.894-6.28,11.169-10.243,19.283-9.348c9.258,1.021,16.694,8.542,17.622,17.81c1.232,12.295-8.683,22.607-20.849,22.042
+                  c-9.9-0.46-18.128-8.344-18.972-18.218c-0.292-3.416,0.276-6.673,1.51-9.578"/>
                 </svg>
+
                 <div class="successtext">
                     <p>Дякуємо за реєстрацію!</p>
                 </div>
+
             </div>
+
         </div>
 
         <div class="forgot">
@@ -96,7 +102,7 @@
         <div>
             <div class="cover-photo"></div>
             <div class="profile-photo"></div>
-            <h1 class="welcome">Вітаємо, {{ fullname }}</h1>
+            <h1 class="welcome">Вітаємо, {{ email }}</h1>
             {#            <a class="btn-goback" value="Refresh" onClick="history.go()">Повернутися назад</a>#}
         </div>
     </div>
