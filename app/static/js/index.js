@@ -11,23 +11,6 @@ $(document).ready(function () {
         $(this).removeClass("idle").addClass("active");
     });
 
-    $(".btn-signup").click(function () {
-        $(".nav").toggleClass("nav-up");
-        $(".form-signup-left").toggleClass("form-signup-down");
-        $(".success").toggleClass("success-left");
-        $(".frame").toggleClass("frame-short");
-    });
-
-    $(".btn-signin").click(function () {
-        $(".btn-animate").toggleClass("btn-animate-grow");
-        $(".welcome").toggleClass("welcome-left");
-        $(".cover-photo").toggleClass("cover-photo-down");
-        $(".frame").toggleClass("frame-short");
-        $(".profile-photo").toggleClass("profile-photo-down");
-        $(".btn-goback").toggleClass("btn-goback-up");
-        $(".forgot").toggleClass("forgot-fade");
-    });
-
     $('.toggle-password').click(function () {
         $(this).toggleClass('fa-eye fa-eye-slash');
         const input = $(this).siblings('input');
@@ -43,7 +26,7 @@ $(document).ready(function () {
         });
     }
 
-    async function handleFormSubmit(event, form, successRedirect) {
+    async function handleFormSubmit(event, form) {
         event.preventDefault();
 
         if (isSubmitting) return;
@@ -52,8 +35,13 @@ $(document).ready(function () {
         const submitButton = $(form).find('button[type="submit"]');
         submitButton.prop('disabled', true);
 
+        if (!validateForm(form)) {
+            isSubmitting = false;
+            submitButton.prop('disabled', false);
+            return;
+        }
+
         const formData = new FormData(form);
-        console.log("Отправка данных:", Object.fromEntries(formData));
 
         try {
             const response = await fetch($(form).attr('action'), {
@@ -65,7 +53,7 @@ $(document).ready(function () {
             try {
                 data = await response.json();
             } catch (error) {
-                console.error("Ошибка при разборе JSON:", error);
+                console.error("Помилка при розборі JSON:", error);
                 showNotification('error', `Помилка сервера (${response.status})`);
                 isSubmitting = false;
                 submitButton.prop('disabled', false);
@@ -77,15 +65,16 @@ $(document).ready(function () {
             } else if (!response.ok) {
                 showNotification('error', `Помилка сервера (${response.status}): ${response.statusText}`);
             } else if (data.success) {
-                showNotification('success', data.success);
+                // showNotification('success', data.success);
 
-                document.getElementById("check").classList.add("checkmark");
-
-                triggerSuccessAnimations();
-                setTimeout(() => window.location.href = successRedirect, 4000);
+                if ($(form).attr('id') === 'register-form') {
+                    setTimeout(() => applySignupAnimations(), 1000);
+                } else if ($(form).attr('id') === 'login-form') {
+                    setTimeout(() => applyLoginAnimations(), 100);
+                }
             }
         } catch (error) {
-            console.error('Ошибка при отправке формы:', error);
+            console.error('Помилка при відправці форми:', error);
             showNotification('error', 'Щось пішло не так. Спробуйте ще раз.');
         } finally {
             isSubmitting = false;
@@ -93,29 +82,56 @@ $(document).ready(function () {
         }
     }
 
+    function validateForm(form) {
+        let isValid = true;
+        $(form).find("input").each(function () {
+            if ($(this).val().trim() === "") {
+                isValid = false;
+                $(this).addClass("error");
+            } else {
+                $(this).removeClass("error");
+            }
+        });
 
-    function triggerSuccessAnimations() {
+        if (!isValid) {
+            showNotification('error', 'Будь ласка, заповніть усі поля.');
+        }
+        return isValid;
+    }
+
+    function applySignupAnimations() {
+        $("#check").addClass("checkmark");
+        $(".nav").addClass("nav-up");
+        $(".form-signup-left").addClass("form-signup-down");
+        $(".success").addClass("success-left");
+        $(".frame").addClass("frame-short");
+
+        // $(".form-signup .cover-photo").removeClass("cover-photo-down");
+        // $(".form-signup .profile-photo").removeClass("profile-photo-down");
+        // $(".form-signup .btn-goback").removeClass("btn-goback-up");
+        // $(".form-signup .forgot").removeClass("forgot-fade");
+        // $(".form-signup .welcome").removeClass("welcome-left");
+        // $(".form-signup").removeClass("welcome-left");
+
+    }
+
+    function applyLoginAnimations() {
         $(".btn-animate").addClass("btn-animate-grow");
         $(".welcome").addClass("welcome-left");
-        $(".cover-photo").addClass("cover-photo-down");
         $(".frame").addClass("frame-short");
+        $(".cover-photo").addClass("cover-photo-down");
         $(".profile-photo").addClass("profile-photo-down");
         $(".btn-goback").addClass("btn-goback-up");
         $(".forgot").addClass("forgot-fade");
-        // $("#check").addClass("checked");
+
     }
 
     $('#login-form').on('submit', function (event) {
-        // showNotification('info', 'Надсилаємо дані...');
-        handleFormSubmit(event, this, '/order_form');
+        handleFormSubmit(event, this);
     });
 
     $('#register-form').on('submit', function (event) {
-        showNotification('info', 'Надсилаємо дані...');
-        handleFormSubmit(event, this, '/');
+        showNotification('info', 'Надсилаємо дані... Будь ласка, зачекайте');
+        handleFormSubmit(event, this);
     });
-
 });
-
-
-

@@ -21,80 +21,78 @@
                 <li class="signup-inactive"><a class="btn">Зареєструватися</a></li>
             </ul>
         </div>
-        <div>
-            <form id="login-form" class="form-signin" action="{{ url_for('login') }}" method="post" name="form">
-                <label for="signin-email">Електронна пошта</label>
-                <input class="form-styling" type="email" id="signin-email" name="signin-email" placeholder="" required/>
-                <div class="input-field">
-                    <label for="signin-password">Пароль</label>
-                    <input class="form-styling input" type="password" id="signin-password" name="signin-password"
-                           placeholder="" required/>
-                    <span toggle="#signin-password" class="toggle-password fa fa-eye"></span>
-                </div>
-                <input type="checkbox" id="checkbox"/>
-                <label for="checkbox"><span class="ui"></span>Залишатися у системі</label>
-                <div class="btn-animate">
-                    <button type="submit" class="btn-signin">Увійти</button>
-                </div>
-                <div class="error-message"></div>
-            </form>
+        <form id="login-form" class="form-signin" action="{{ url_for('login') }}" method="post" name="form">
+            <label for="signin-email">Електронна пошта</label>
+            <input class="form-styling" type="email" id="signin-email" name="signin-email" placeholder="" required/>
+            <div class="input-field">
+                <label for="signin-password">Пароль</label>
+                <input class="form-styling input" type="password" id="signin-password" name="signin-password"
+                       placeholder="" required/>
+                <span toggle="#signin-password" class="toggle-password fa fa-eye"></span>
+            </div>
+            <input type="checkbox" id="checkbox"/>
+            <label for="checkbox"><span class="ui"></span>Залишатися у системі</label>
+            <div class="btn-animate">
+                <button type="submit" class="btn-signin">Увійти</button>
+            </div>
+            <div class="error-message"></div>
+        </form>
 
-            <form id="register-form" class="form-signup" action="{{ url_for('register') }}" method="post" name="form">
+        <form id="register-form" class="form-signup" action="{{ url_for('register') }}" method="post" name="form">
 
-                <label for="firstname">Ім'я</label>
-                <input class="form-styling" type="text" id="firstname" name="firstname" required/>
+            <label for="firstname">Ім'я</label>
+            <input class="form-styling" type="text" id="firstname" name="firstname" required/>
 
-                <label for="lastname">Прізвище</label>
-                <input class="form-styling" type="text" id="lastname" name="lastname" required/>
+            <label for="lastname">Прізвище</label>
+            <input class="form-styling" type="text" id="lastname" name="lastname" required/>
 
-                <label for="middle_name">По-батькові</label>
-                <input class="form-styling" type="text" id="middle_name" name="middle_name"/>
+            <label for="middle_name">По-батькові</label>
+            <input class="form-styling" type="text" id="middle_name" name="middle_name"/>
 
-                <label for="phone">Телефон</label>
-                <input class="form-styling" type="text" id="phone" name="phone" required/>
+            <label for="phone">Телефон</label>
+            <input class="form-styling" type="text" id="phone" name="phone" required/>
 
-                <label for="signup-email">Електронна пошта</label>
-                <input class="form-styling" type="email" id="signup-email" name="signup-email" required
-                       autocomplete="@gmail.com"/>
+            <label for="signup-email">Електронна пошта</label>
+            <input class="form-styling" type="email" id="signup-email" name="signup-email" required
+                   autocomplete="@gmail.com"/>
 
-                <div class="input-field">
-                    <label for="signup-password">Пароль</label>
-                    <input class="form-styling input" type="password" id="signup-password" name="signup-password"
-                           required/>
-                    <span toggle="#signup-password" class="toggle-password fa fa-eye"></span>
-                </div>
+            <div class="input-field">
+                <label for="signup-password">Пароль</label>
+                <input class="form-styling input" type="password" id="signup-password" name="signup-password"
+                       required/>
+                <span toggle="#signup-password" class="toggle-password fa fa-eye"></span>
+            </div>
 
-                <div class="input-field">
-                    <label for="confirm-password">Підтвердження пароля</label>
-                    <input class="form-styling input" type="password" id="confirm-password" name="confirm-password"
-                           required/>
-                    <span toggle="#confirm-password" class="toggle-password fa fa-eye"></span>
-                </div>
+            <div class="input-field">
+                <label for="confirm-password">Підтвердження пароля</label>
+                <input class="form-styling input" type="password" id="confirm-password" name="confirm-password"
+                       required/>
+                <span toggle="#confirm-password" class="toggle-password fa fa-eye"></span>
+            </div>
 
-                <button type="submit" class="btn-signup">
-                    Зареєструватися
-                </button>
+            <button type="submit" class="btn-signup">
+                Зареєструватися
+            </button>
 
-                <div class="error-message"></div>
-            </form>
+            <div class="error-message"></div>
+        </form>
 
-            <div class="success">
-                <svg width="270" height="270" xmlns="http://www.w3.org/2000/svg"
-                     xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                     viewBox="0 0 60 60" id="check">
-                    <path fill="#ffffff" d="M40.61,23.03L26.67,36.97L13.495,23.788c-1.146-1.147-1.359-2.936-0.504-4.314
+        <div class="success">
+            <svg width="270" height="270" xmlns="http://www.w3.org/2000/svg"
+                 xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                 viewBox="0 0 60 60" id="check">
+                <path fill="#ffffff" d="M40.61,23.03L26.67,36.97L13.495,23.788c-1.146-1.147-1.359-2.936-0.504-4.314
                   c3.894-6.28,11.169-10.243,19.283-9.348c9.258,1.021,16.694,8.542,17.622,17.81c1.232,12.295-8.683,22.607-20.849,22.042
                   c-9.9-0.46-18.128-8.344-18.972-18.218c-0.292-3.416,0.276-6.673,1.51-9.578"
-                    />
-                </svg>
+                />
+            </svg>
 
-                <div class="successtext">
-                    <p>Дякуємо за реєстрацію!</p>
-                </div>
-
+            <div class="successtext">
+                <p>Дякуємо за реєстрацію!</p>
             </div>
 
         </div>
+
 
         <div class="forgot">
             <a href="#">Забули пароль?</a>

@@ -156,16 +156,16 @@ li {
     height: 150px;
     text-align: center;
     position: relative;
-    top: -890px;
-    left: 450px;
+    top: -270%;
+    left: 115%;
     opacity: .0;
     -webkit-transition: all .8s .4s ease;
     transition: all .8s .4s ease;
 }
 
 .success-left {
-    -webkit-transform: translateX(0);
-    transform: translateX(0);
+    -webkit-transform: translateX(-130%);
+    transform: translateX(-130%);
     opacity: 1;
 }
 
@@ -213,18 +213,18 @@ li {
 
 #check path {
     stroke: #ffffff;
-    stroke-linecap:round;
-    stroke-linejoin:round;
+    stroke-linecap: round;
+    stroke-linejoin: round;
     stroke-width: 1px;
     stroke-dasharray: 60px 300px;
-    stroke-dashoffset: -200px;
-    fill: rgba(255,255,255,.0);
+    stroke-dashoffset: -166px;
+    fill: rgba(255, 255, 255, .0);
     transition: stroke-dashoffset 2s ease 0.5s, fill 1.5s ease 1s;
 }
 
 #check.checkmark path {
-    stroke-dashoffset: 60px;
-    fill: rgba(255,255,255,.03);
+    stroke-dashoffset: 33px;
+    fill: rgba(255, 255, 255, .03);
 }
 
 .form-signin input, .form-signup input {
@@ -609,6 +609,11 @@ a.btn-goback:hover {
         padding: 15px;
     }
 
+    .success {
+        top: -260%;
+        left: 110%;
+    }
+
     .btn-signup,
     .btn-signin {
         font-size: 14px;
@@ -628,6 +633,11 @@ a.btn-goback:hover {
 
     .form-signin {
         max-width: 320px;
+    }
+
+    .success {
+        top: -260%;
+        left: 110%;
     }
 
     .btn-signup,
