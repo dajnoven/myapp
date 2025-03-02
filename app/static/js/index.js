@@ -26,7 +26,7 @@ $(document).ready(function () {
         });
     }
 
-    async function handleFormSubmit(event, form) {
+    async function handleFormSubmit(event, form, successRedirect) {
         event.preventDefault();
 
         if (isSubmitting) return;
@@ -72,6 +72,8 @@ $(document).ready(function () {
                 } else if ($(form).attr('id') === 'login-form') {
                     setTimeout(() => applyLoginAnimations(), 100);
                 }
+
+                setTimeout(() => window.location.href = successRedirect, 4000);
             }
         } catch (error) {
             console.error('Помилка при відправці форми:', error);
@@ -127,11 +129,11 @@ $(document).ready(function () {
     }
 
     $('#login-form').on('submit', function (event) {
-        handleFormSubmit(event, this);
+        handleFormSubmit(event, this, '/order_form');
     });
 
     $('#register-form').on('submit', function (event) {
         showNotification('info', 'Надсилаємо дані... Будь ласка, зачекайте');
-        handleFormSubmit(event, this);
+        handleFormSubmit(event, this, '/');
     });
 });
